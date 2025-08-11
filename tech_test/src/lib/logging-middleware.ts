@@ -11,8 +11,10 @@ const VALID_COMMON_PACKAGES = ['auth', 'config', 'middleware', 'utils'];
 
 class LoggingMiddleware {
   private static instance: LoggingMiddleware;
-  private bearerToken: string = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiYXVkIjoiaHR0cDovLzIwLjI0NC41Ni4xNDQvZXZhbHVhdGlvbi1zZXJ2aWNlIiwiZW1haWwiOiJwcml0aGFsc2luZy52aWxhc18yMDI2QHdveHNlbi5lZHUuaW4iLCJleHAiOjE3NTQ4OTQ1NTQsImlhdCI6MTc1NDg5MzY1NCwiaXNzIjoiQWZmb3JkIE1lZGljYWwgVGVjaG5vbG9naWVzIFByaXZhdGUgTGltaXRlZCIsImp0aSI6IjYyZTRhY2EwLTQzYmYtNGI0Yi1iMGI0LTczNTVmNDMxNTE4YSIsImxvY2FsZSI6ImVuLUlOIiwibmFtZSI6InByaXRoYWxzaW5nIG1vcmUiLCJzdWIiOiI5MmVmNDg2NC0xMGJlLTRlYmQtYjFjNS0wYWE3ZWE0NjA2YzIifSwiZW1haWwiOiJwcml0aGFsc2luZy52aWxhc18yMDI2QHdveHNlbi5lZHUuaW4iLCJuYW1lIjoicHJpdGhhbHNpbmcgbW9yZSIsInJvbGxObyI6IjIyd3UwMTA0MDkwIiwiYWNjZXNzQ29kZSI6IlVNWFZRVCIsImNsaWVudElEIjoiOTJlZjQ4NjQtMTBiZS00ZWJkLWIxYzUtMGFhN2VhNDYwNmMyIiwiY2xpZW50U2VjcmV0IjoieGFmanhtd3N0emtzakFRYSJ9.rXd344y0eRaa8OEVn8RxTRzj3h3s8GtRyrC221NqsBc';
-  private endpoint: string = 'http://20.244.56.144/evaluation-service/logs';
+  private endpoint: string =
+    typeof window === 'undefined'
+      ? 'http://localhost:3000/api/log' // Use your dev server's URL/port
+      : '/api/log';
 
   private constructor() {}
 
@@ -31,7 +33,6 @@ class LoggingMiddleware {
       return false;
     }
 
-    // Validate level
     if (!['debug', 'info', 'warn', 'error', 'fatal'].includes(level)) {
       return false;
     }
@@ -64,12 +65,8 @@ class LoggingMiddleware {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.bearerToken}`,
         },
-        body: JSON.stringify({
-          ...data,
-          timestamp: new Date().toISOString(),
-        }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {

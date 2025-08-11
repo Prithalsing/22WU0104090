@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <Navigation />
       <Container maxWidth="md">
-        <Box sx={{ py: 4 }}>
+        <Box sx={{ py: 2 }}>
           <UrlShortenerForm />
         </Box>
       </Container>
