@@ -12,11 +12,12 @@ export async function POST(request: Request) {
     });
     const authData = await authResp.json();
     const token = authData.access_token;
+    console.log(token)
 
     // Step 2: Use the token to call the logs API
     const resp = await fetch('http://20.244.56.144/evaluation-service/logs', {
       method: 'POST',
-      headers: {~
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
