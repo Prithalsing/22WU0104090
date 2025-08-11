@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { shortcode: string } }
 ) {
   try {
-    const { shortcode } = params;
+    const { shortcode } = await params;
     logger.info('backend', 'route', `GET /${shortcode} redirect endpoint called`);
 
     const urlData = urlStorage.getUrl(shortcode);
